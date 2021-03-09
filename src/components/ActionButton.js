@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Icon from '@material-ui/core/Icon';
-import Card from "./Card";
+import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
 import TextareaAutosize from 'react-textarea-autosize';
+import { connect } from "react-redux";
+import { addList } from "../actions";
 
 function ActionButton(props) {
 
@@ -45,6 +48,17 @@ function ActionButton(props) {
     setInputText(e.target.value);
   }
 
+  function handleAddList() {
+    const { dispatch } = props;
+    const text  = inputText;
+
+    if (text) {
+      dispatch(addList(text));
+    }
+
+    return;
+  }
+
   function renderForm() {
 
     const { list } = props;
@@ -55,12 +69,17 @@ function ActionButton(props) {
 
     return (
       <div>
-
+        <Card style={{
+          overflow: "visible",
+          minHeight: 80,
+          minWidth: 272,
+          padding: "6px 8px 2px"
+        }}>
           <TextareaAutosize
             placeholder={placeholder}
             autoFocus
             onBlur={closeForm}
-
+            value={inputText}
             onChange={handleInputChange}
             style={{
               resize: "none",
@@ -70,15 +89,25 @@ function ActionButton(props) {
               border: "none"
             }}
           />
-
+        </Card>
+        <div style={styles.formButtonGroup}>
+          <Button 
+            onMouseDown={handleAddList}
+            variant="contained" 
+            style={{color: "white", backgroundColor: "#5aac44"}}
+          >
+            {buttonTitle}
+          </Button>
+          <Icon style={{ marginLeft: 8, cursor: "pointer" }}>close</Icon>
+        </div>
       </div>
     )
-  }
+  };
 
   
 
   return formOpen ? renderForm() : renderAddButton();
-}
+};
 
 
 
@@ -92,8 +121,14 @@ const styles = {
     height: 36,
     width: 272,
     paddingLeft: 10
+  },
+  formButtonGroup: {
+    marginTop: 8,
+    display: "flex",
+    alignItems: "center"
   }
+
 }
 
 
-export default ActionButton;
+export default connect() (ActionButton);
