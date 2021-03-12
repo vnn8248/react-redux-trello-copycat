@@ -4,7 +4,7 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import TextareaAutosize from 'react-textarea-autosize';
 import { connect } from "react-redux";
-import { addList } from "../actions";
+import { addList, addCard } from "../actions";
 
 function ActionButton(props) {
 
@@ -38,26 +38,38 @@ function ActionButton(props) {
 
   function openForm() {
     setFormOpen(!formOpen);
-  }
+  };
 
   function closeForm(e) {
     setFormOpen(!formOpen);
-  }
+  };
 
   function handleInputChange(e) {
     setInputText(e.target.value);
-  }
+  };
 
   function handleAddList() {
     const { dispatch } = props;
     const text  = inputText;
 
     if (text) {
+      setInputText("");
       dispatch(addList(text));
     }
 
     return;
-  }
+  };
+
+  function handleAddCard() {
+    const { dispatch, listID } = props;
+    const text = inputText;
+
+    if (text) {
+      setInputText("");
+      dispatch(addCard(listID, text));
+    }
+
+  };
 
   function renderForm() {
 
@@ -92,7 +104,7 @@ function ActionButton(props) {
         </Card>
         <div style={styles.formButtonGroup}>
           <Button 
-            onMouseDown={handleAddList}
+            onMouseDown={list ? handleAddList : handleAddCard}
             variant="contained" 
             style={{color: "white", backgroundColor: "#5aac44"}}
           >
